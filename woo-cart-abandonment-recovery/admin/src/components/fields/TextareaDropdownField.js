@@ -1,27 +1,23 @@
 import { useState, useEffect, useRef } from 'react';
 import { useStateValue } from '@Store';
 import useDebounceDispatch from '@Utils/debounceDispatch';
-import { Input, Button, DropdownMenu } from '@bsf/force-ui';
+import { TextArea, Button, DropdownMenu } from '@bsf/force-ui';
 import { EllipsisVerticalIcon } from '@heroicons/react/24/outline';
-import FieldWrapper from '@Components/common/FieldWrapper';
-import { useProAccess } from '@Components/pro/useProAccess';
+import { __ } from '@wordpress/i18n';
 
-const SubjectField = ( {
+import FieldWrapper from '@Components/common/FieldWrapper';
+
+const TextareaDropdownField = ( {
 	title,
 	description,
 	name,
 	value,
-	badge,
 	handleChange,
 	options = [],
 	autoSave = true,
 	error,
-	isPro = false,
-	proUpgradeMessage,
 } ) => {
 	const [ state, dispatch ] = useStateValue();
-	const { shouldBlockProFeatures } = useProAccess();
-	const isFeatureBlocked = shouldBlockProFeatures();
 	const settingsData = state.settingsData || {};
 	const settingsValues = settingsData.values || {};
 
@@ -91,26 +87,17 @@ const SubjectField = ( {
 	};
 
 	return (
-		<FieldWrapper
-			title={ title }
-			description={ description }
-			type="block"
-			isPro={ isPro }
-			proUpgradeMessage={ proUpgradeMessage }
-		>
+		<FieldWrapper title={ title } description={ description } type="block">
 			<div className="flex gap-2">
 				<div className="grow">
-					<Input
-						className={ `${
-							badge ? 'w-24 ' : 'w-full'
-						} focus:[&>input]:ring-focus` }
+					<TextArea
+						className="w-full focus:[&>input]:ring-focus"
 						type="text"
 						size="md"
 						name={ name }
 						ref={ inputRef }
 						value={ textValue }
 						onChange={ handleOnChange }
-						disabled={ isPro && isFeatureBlocked }
 					/>
 					{ error && (
 						<p className="text-red-500 text-sm mt-1">{ error }</p>
@@ -119,7 +106,12 @@ const SubjectField = ( {
 				{ options.length > 0 && (
 					<DropdownMenu placement="bottom-end">
 						<DropdownMenu.Trigger>
-							<span className="sr-only">Open Dropdown</span>
+							<span className="sr-only">
+								{ __(
+									'Open Dropdown',
+									'woo-cart-abandonment-recovery'
+								) }
+							</span>
 							<Button
 								size="md"
 								type="button"
@@ -155,4 +147,4 @@ const SubjectField = ( {
 	);
 };
 
-export default SubjectField;
+export default TextareaDropdownField;

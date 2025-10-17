@@ -5,19 +5,15 @@ import { Input } from '@bsf/force-ui';
 import FieldWrapper from '@Components/common/FieldWrapper';
 import { useProAccess } from '@Components/pro/useProAccess';
 
-const NumberField = ( {
+const PasswordField = ( {
 	title,
 	description,
 	name,
 	value,
 	badge,
-	min,
-	after = '',
-	suffix = '',
 	handleChange,
 	autoSave = true,
-	disableStyle,
-	className = '',
+	error,
 	isPro = false,
 	proUpgradeMessage = '',
 } ) => {
@@ -33,7 +29,7 @@ const NumberField = ( {
 		handleChange && ! autoSave
 			? value ?? ''
 			: settingsValues[ name ] ?? value ?? '';
-	const [ numberValue, setNumberValue ] = useState( currentValue );
+	const [ textValue, setTextValue ] = useState( currentValue );
 	const debouncedUpdate = useDebounceDispatch(
 		dispatch,
 		name,
@@ -47,11 +43,11 @@ const NumberField = ( {
 			handleChange && ! autoSave
 				? value ?? ''
 				: settingsValues[ name ] ?? value ?? '';
-		setNumberValue( newValue );
+		setTextValue( newValue );
 	}, [ settingsValues[ name ], value, handleChange, autoSave ] );
 
 	function handleOnChange( val ) {
-		setNumberValue( val );
+		setTextValue( val );
 
 		// If handleChange is provided and autoSave is false, use form mode
 		if ( handleChange && ! autoSave ) {
@@ -61,9 +57,7 @@ const NumberField = ( {
 
 		// Otherwise use auto-save mode
 		if ( autoSave ) {
-			if ( parseInt( val ) >= parseInt( min || 0 ) ) {
-				debouncedUpdate( String( val ) );
-			}
+			debouncedUpdate( String( val ) );
 		}
 	}
 
@@ -71,39 +65,30 @@ const NumberField = ( {
 		<FieldWrapper
 			title={ title }
 			description={ description }
-			type="inline"
-			disableStyle={ disableStyle }
+			type="block"
 			isPro={ isPro }
 			proUpgradeMessage={ proUpgradeMessage }
 		>
-			<div className="flex sm:justify-end items-center gap-2">
+			<div>
 				<Input
 					className={ `${
-						className || ( badge ? 'w-24' : 'w-20 rounded-r-md' )
-					} focus:[&>input]:ring-focus` }
-					suffix={
-						suffix && (
-							<span className="text-badge-color-gray p-0.5 text-center text-xs font-medium">
-								{ suffix }
-							</span>
-						)
-					}
-					type="number"
+						badge ? 'w-24 ' : 'w-full'
+					} focus:[&>input]:ring-focus ${
+						error ? 'border-red-500' : ''
+					}` }
+					type="password"
 					size="md"
 					name={ name }
-					value={ numberValue }
+					value={ textValue }
 					onChange={ handleOnChange }
-					min={ min || 0 }
 					disabled={ isPro && isFeatureBlocked }
 				/>
-				{ after && (
-					<span className="text-badge-color-gray p-0.5 text-center text-xs font-medium">
-						{ after }
-					</span>
+				{ error && (
+					<p className="text-red-500 text-sm mt-1">{ error }</p>
 				) }
 			</div>
 		</FieldWrapper>
 	);
 };
 
-export default NumberField;
+export default PasswordField;

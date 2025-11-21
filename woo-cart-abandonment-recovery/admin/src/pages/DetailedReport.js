@@ -19,6 +19,7 @@ const DetailedReport = () => {
 	const [ email, setEmail ] = useState( '' );
 	const [ checkoutLink, setCheckoutLink ] = useState( '' );
 	const [ sessionId, setSessionId ] = useState( '' );
+	const [ unsubscribed, setUnsubscribed ] = useState( '' );
 	const [ buttonLoading, setButtonLoading ] = useState( false );
 	const navigate = useNavigate();
 	const urlParams = new URLSearchParams( useLocation().search );
@@ -40,6 +41,7 @@ const DetailedReport = () => {
 					setEmail( response.details?.email || '' );
 					setCheckoutLink( response.checkout_link || '' );
 					setSessionId( response.details?.session_id || '' );
+					setUnsubscribed( response.details?.unsubscribed || '' );
 					setIsLoading( false );
 				},
 				() => {
@@ -142,6 +144,7 @@ const DetailedReport = () => {
 						email={ email }
 						orderStatus={ orderStatus }
 						checkoutLink={ checkoutLink }
+						unsubscribed={ unsubscribed }
 						isLoading={ isLoading }
 					/>
 					{ /* User Order Details Section */ }
@@ -156,3 +159,4 @@ const DetailedReport = () => {
 };
 
 export default DetailedReport;
+

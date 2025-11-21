@@ -1,4 +1,4 @@
-import { Title } from '@bsf/force-ui';
+import { Title, Badge } from '@bsf/force-ui';
 import { __ } from '@wordpress/i18n';
 
 import SectionWrapper from '@Components/common/SectionWrapper';
@@ -10,6 +10,7 @@ const UserAddressDetails = ( {
 	email,
 	orderStatus,
 	checkoutLink,
+	unsubscribed,
 	isLoading,
 } ) => {
 	return (
@@ -24,7 +25,20 @@ const UserAddressDetails = ( {
 					) }
 					className="[&_h2]:text-gray-900"
 				/>
-				{ ! isLoading && <OrderStatusBadge status={ orderStatus } /> }
+				{ ! isLoading && (
+					<div className="flex gap-2">
+						<OrderStatusBadge status={ orderStatus } />
+						{ '1' === unsubscribed && (
+							<Badge
+								label="Unsubscribed"
+								size="sm"
+								type="pill"
+								variant="red"
+								className="w-fit"
+							/>
+						) }
+					</div>
+				) }
 			</div>
 			{ isLoading ? (
 				<div className="flex flex-col md:flex-row gap-8">
@@ -227,3 +241,4 @@ const UserAddressDetails = ( {
 };
 
 export default UserAddressDetails;
+

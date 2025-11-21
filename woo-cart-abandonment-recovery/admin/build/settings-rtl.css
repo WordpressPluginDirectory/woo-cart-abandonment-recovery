@@ -243,6 +243,9 @@
 :is(#wcar-admin-app) .top-10 {
 	top: 2.5rem;
 }
+:is(#wcar-admin-app) .top-2 {
+	top: 0.5rem;
+}
 :is(#wcar-admin-app) .top-2\.5 {
 	top: 0.625rem;
 }
@@ -926,6 +929,9 @@
 }
 :is(#wcar-admin-app) .max-w-32 {
 	max-width: 8rem;
+}
+:is(#wcar-admin-app) .max-w-7xl {
+	max-width: 80rem;
 }
 :is(#wcar-admin-app) .max-w-80 {
 	max-width: 20rem;
@@ -1850,6 +1856,21 @@
 :is(#wcar-admin-app) .bg-opacity-50 {
 	--tw-bg-opacity: 0.5;
 }
+:is(#wcar-admin-app) .bg-gradient-to-r {
+	background-image: linear-gradient(to left, var(--tw-gradient-stops));
+}
+:is(#wcar-admin-app) .from-primary-600 {
+	--tw-gradient-from: #E54E1A var(--tw-gradient-from-position);
+	--tw-gradient-to: rgb(229 78 26 / 0) var(--tw-gradient-to-position);
+	--tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+:is(#wcar-admin-app) .via-flamingo-400 {
+	--tw-gradient-to: rgb(240 100 52 / 0)  var(--tw-gradient-to-position);
+	--tw-gradient-stops: var(--tw-gradient-from), #F06434 var(--tw-gradient-via-position), var(--tw-gradient-to);
+}
+:is(#wcar-admin-app) .to-primary-600 {
+	--tw-gradient-to: #E54E1A var(--tw-gradient-to-position);
+}
 :is(#wcar-admin-app) .fill-current {
 	fill: currentColor;
 }
@@ -1858,6 +1879,9 @@
 }
 :is(#wcar-admin-app) .stroke-1 {
 	stroke-width: 1;
+}
+:is(#wcar-admin-app) .stroke-\[2\] {
+	stroke-width: 2;
 }
 :is(#wcar-admin-app) .object-contain {
 	object-fit: contain;
@@ -2730,9 +2754,10 @@
 }
 
 body .notice,
+body div.fs-notice.promotion, /* The SEO Yoast: bulk-image-alt-text-with-yoast */
 body.wp-admin .notice:not( #wcar-admin-app .notice ),
 body.wp-admin .error:not( #wcar-admin-app .error ) {
-	display: none;
+	display: none !important;
 }
 
 #wpcontent {
@@ -3071,6 +3096,11 @@ a:focus-visible {
 	border-color: rgb(255 255 255 / var(--tw-border-opacity, 1));
 }
 
+:is(#wcar-admin-app) .hover\:bg-\[\#fef1ec\]:hover {
+	--tw-bg-opacity: 1;
+	background-color: rgb(254 241 236 / var(--tw-bg-opacity, 1));
+}
+
 :is(#wcar-admin-app) .hover\:bg-background-brand:hover {
 	--tw-bg-opacity: 1;
 	background-color: rgb(240 100 52 / var(--tw-bg-opacity, 1));
@@ -3198,6 +3228,11 @@ a:focus-visible {
 :is(#wcar-admin-app) .hover\:text-flamingo-400:hover {
 	--tw-text-opacity: 1;
 	color: rgb(240 100 52 / var(--tw-text-opacity, 1));
+}
+
+:is(#wcar-admin-app) .hover\:text-gray-200:hover {
+	--tw-text-opacity: 1;
+	color: rgb(229 231 235 / var(--tw-text-opacity, 1));
 }
 
 :is(#wcar-admin-app) .hover\:text-gray-500:hover {

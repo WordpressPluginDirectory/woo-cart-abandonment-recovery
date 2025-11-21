@@ -16,6 +16,7 @@ import {
 	MagnifyingGlassIcon,
 	XMarkIcon,
 	ExclamationTriangleIcon,
+	BookmarkSlashIcon,
 } from '@heroicons/react/24/outline';
 import { __, sprintf } from '@wordpress/i18n';
 import { useNavigate } from 'react-router-dom';
@@ -687,7 +688,7 @@ const FollowUp = () => {
 														}
 													/>
 												</AppTooltip>
-												{ 0 === item.unsubscribed && (
+												{ 0 === item.unsubscribed ? (
 													<AppTooltip
 														content={ __(
 															'Unsubscribe',
@@ -711,6 +712,36 @@ const FollowUp = () => {
 																	item.id
 																)
 															}
+														/>
+													</AppTooltip>
+												) : (
+													<AppTooltip
+														content={ __(
+															'Unsubscribed',
+															'woo-cart-abandonment-recovery'
+														) }
+														position="top"
+													>
+														<Button
+															variant="ghost"
+															icon={
+																<BookmarkSlashIcon
+																	className="h-6 w-6"
+																	aria-label={ __(
+																		'Unsubscribed',
+																		'woo-cart-abandonment-recovery'
+																	) }
+																	disabled={
+																		true
+																	}
+																/>
+															}
+															size="xs"
+															className="text-gray-500 cursor-not-allowed opacity-50"
+															aria-label={ __(
+																'Unsubscribed',
+																'woo-cart-abandonment-recovery'
+															) }
 														/>
 													</AppTooltip>
 												) }
@@ -894,3 +925,4 @@ const FollowUp = () => {
 };
 
 export default FollowUp;
+

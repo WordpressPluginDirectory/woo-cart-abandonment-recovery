@@ -18,9 +18,10 @@
 }
 
 body .notice,
+body div.fs-notice.promotion, /* The SEO Yoast: bulk-image-alt-text-with-yoast */
 body.wp-admin .notice:not( #wcar-admin-app .notice ),
 body.wp-admin .error:not( #wcar-admin-app .error ) {
-	display: none;
+	display: none !important;
 }
 
 #wpcontent {

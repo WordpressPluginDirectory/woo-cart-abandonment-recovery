@@ -549,6 +549,9 @@
 :is(#wcar-admin-app) .mt-4 {
 	margin-top: 1rem;
 }
+:is(#wcar-admin-app) .mt-6 {
+	margin-top: 1.5rem;
+}
 :is(#wcar-admin-app) .mt-7 {
 	margin-top: 1.75rem;
 }
@@ -599,6 +602,9 @@
 }
 :is(#wcar-admin-app) .hidden {
 	display: none;
+}
+:is(#wcar-admin-app) .aspect-video {
+	aspect-ratio: 16 / 9;
 }
 :is(#wcar-admin-app) .size-1\.5 {
 	width: 0.375rem;
@@ -675,6 +681,9 @@
 :is(#wcar-admin-app) .h-2\.5 {
 	height: 0.625rem;
 }
+:is(#wcar-admin-app) .h-24 {
+	height: 6rem;
+}
 :is(#wcar-admin-app) .h-3 {
 	height: 0.75rem;
 }
@@ -683,6 +692,9 @@
 }
 :is(#wcar-admin-app) .h-4 {
 	height: 1rem;
+}
+:is(#wcar-admin-app) .h-40 {
+	height: 10rem;
 }
 :is(#wcar-admin-app) .h-5 {
 	height: 1.25rem;
@@ -909,6 +921,9 @@
 :is(#wcar-admin-app) .min-w-12 {
 	min-width: 3rem;
 }
+:is(#wcar-admin-app) .min-w-32 {
+	min-width: 8rem;
+}
 :is(#wcar-admin-app) .min-w-6 {
 	min-width: 1.5rem;
 }
@@ -929,6 +944,9 @@
 }
 :is(#wcar-admin-app) .max-w-32 {
 	max-width: 8rem;
+}
+:is(#wcar-admin-app) .max-w-48 {
+	max-width: 12rem;
 }
 :is(#wcar-admin-app) .max-w-7xl {
 	max-width: 80rem;
@@ -1225,8 +1243,14 @@
 :is(#wcar-admin-app) .gap-8 {
 	gap: 2rem;
 }
+:is(#wcar-admin-app) .gap-\[12px\] {
+	gap: 12px;
+}
 :is(#wcar-admin-app) .gap-\[1px\] {
 	gap: 1px;
+}
+:is(#wcar-admin-app) .gap-\[2px\] {
+	gap: 2px;
 }
 :is(#wcar-admin-app) .gap-x-2 {
 	column-gap: 0.5rem;
@@ -1273,6 +1297,11 @@
 	margin-top: calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));
 	margin-bottom: calc(0.25rem * var(--tw-space-y-reverse));
 }
+:is(#wcar-admin-app) :is(.space-y-1\.5 > :not([hidden]) ~ :not([hidden])) {
+	--tw-space-y-reverse: 0;
+	margin-top: calc(0.375rem * calc(1 - var(--tw-space-y-reverse)));
+	margin-bottom: calc(0.375rem * var(--tw-space-y-reverse));
+}
 :is(#wcar-admin-app) :is(.space-y-2 > :not([hidden]) ~ :not([hidden])) {
 	--tw-space-y-reverse: 0;
 	margin-top: calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));
@@ -1287,6 +1316,16 @@
 	--tw-space-y-reverse: 0;
 	margin-top: calc(1rem * calc(1 - var(--tw-space-y-reverse)));
 	margin-bottom: calc(1rem * var(--tw-space-y-reverse));
+}
+:is(#wcar-admin-app) :is(.space-y-6 > :not([hidden]) ~ :not([hidden])) {
+	--tw-space-y-reverse: 0;
+	margin-top: calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));
+	margin-bottom: calc(1.5rem * var(--tw-space-y-reverse));
+}
+:is(#wcar-admin-app) :is(.space-y-7 > :not([hidden]) ~ :not([hidden])) {
+	--tw-space-y-reverse: 0;
+	margin-top: calc(1.75rem * calc(1 - var(--tw-space-y-reverse)));
+	margin-bottom: calc(1.75rem * var(--tw-space-y-reverse));
 }
 :is(#wcar-admin-app) :is(.divide-x-0 > :not([hidden]) ~ :not([hidden])) {
 	--tw-divide-x-reverse: 0;
@@ -1569,7 +1608,7 @@
 }
 :is(#wcar-admin-app) .border-brand-primary-600 {
 	--tw-border-opacity: 1;
-	border-color: rgb(37 99 235 / var(--tw-border-opacity, 1));
+	border-color: rgb(229 78 26 / var(--tw-border-opacity, 1));
 }
 :is(#wcar-admin-app) .border-button-primary {
 	--tw-border-opacity: 1;
@@ -1590,6 +1629,10 @@
 :is(#wcar-admin-app) .border-flamingo-400 {
 	--tw-border-opacity: 1;
 	border-color: rgb(240 100 52 / var(--tw-border-opacity, 1));
+}
+:is(#wcar-admin-app) .border-flamingo-500 {
+	--tw-border-opacity: 1;
+	border-color: rgb(237 77 34 / var(--tw-border-opacity, 1));
 }
 :is(#wcar-admin-app) .border-focus-error-border {
 	--tw-border-opacity: 1;
@@ -1723,7 +1766,7 @@
 }
 :is(#wcar-admin-app) .bg-brand-primary-600 {
 	--tw-bg-opacity: 1;
-	background-color: rgb(37 99 235 / var(--tw-bg-opacity, 1));
+	background-color: rgb(229 78 26 / var(--tw-bg-opacity, 1));
 }
 :is(#wcar-admin-app) .bg-button-danger {
 	--tw-bg-opacity: 1;
@@ -1880,8 +1923,14 @@
 :is(#wcar-admin-app) .stroke-1 {
 	stroke-width: 1;
 }
+:is(#wcar-admin-app) .stroke-2 {
+	stroke-width: 2;
+}
 :is(#wcar-admin-app) .stroke-\[2\] {
 	stroke-width: 2;
+}
+:is(#wcar-admin-app) .stroke-\[3px\] {
+	stroke-width: 3px;
 }
 :is(#wcar-admin-app) .object-contain {
 	object-fit: contain;
@@ -1930,6 +1979,9 @@
 }
 :is(#wcar-admin-app) .p-6 {
 	padding: 1.5rem;
+}
+:is(#wcar-admin-app) .p-7 {
+	padding: 1.75rem;
 }
 :is(#wcar-admin-app) .p-8 {
 	padding: 2rem;
@@ -2029,6 +2081,9 @@
 :is(#wcar-admin-app) .pb-1 {
 	padding-bottom: 0.25rem;
 }
+:is(#wcar-admin-app) .pb-10 {
+	padding-bottom: 2.5rem;
+}
 :is(#wcar-admin-app) .pb-2 {
 	padding-bottom: 0.5rem;
 }
@@ -2040,6 +2095,9 @@
 }
 :is(#wcar-admin-app) .pb-5 {
 	padding-bottom: 1.25rem;
+}
+:is(#wcar-admin-app) .pl-0 {
+	padding-right: 0px;
 }
 :is(#wcar-admin-app) .pl-10 {
 	padding-right: 2.5rem;
@@ -2205,6 +2263,10 @@
 :is(#wcar-admin-app) .tracking-2 {
 	letter-spacing: 0.125em;
 }
+:is(#wcar-admin-app) .\!text-gray-500 {
+	--tw-text-opacity: 1 !important;
+	color: rgb(107 114 128 / var(--tw-text-opacity, 1)) !important;
+}
 :is(#wcar-admin-app) .\!text-gray-600 {
 	--tw-text-opacity: 1 !important;
 	color: rgb(75 85 99 / var(--tw-text-opacity, 1)) !important;
@@ -2247,7 +2309,7 @@
 }
 :is(#wcar-admin-app) .text-brand-primary-600 {
 	--tw-text-opacity: 1;
-	color: rgb(37 99 235 / var(--tw-text-opacity, 1));
+	color: rgb(229 78 26 / var(--tw-text-opacity, 1));
 }
 :is(#wcar-admin-app) .text-button-danger {
 	--tw-text-opacity: 1;
@@ -2293,6 +2355,10 @@
 	--tw-text-opacity: 1;
 	color: rgb(240 100 52 / var(--tw-text-opacity, 1));
 }
+:is(#wcar-admin-app) .text-flamingo-500 {
+	--tw-text-opacity: 1;
+	color: rgb(237 77 34 / var(--tw-text-opacity, 1));
+}
 :is(#wcar-admin-app) .text-gray-400 {
 	--tw-text-opacity: 1;
 	color: rgb(156 163 175 / var(--tw-text-opacity, 1));
@@ -2320,6 +2386,10 @@
 :is(#wcar-admin-app) .text-green-500 {
 	--tw-text-opacity: 1;
 	color: rgb(34 197 94 / var(--tw-text-opacity, 1));
+}
+:is(#wcar-admin-app) .text-green-700 {
+	--tw-text-opacity: 1;
+	color: rgb(21 128 61 / var(--tw-text-opacity, 1));
 }
 :is(#wcar-admin-app) .text-icon-disabled {
 	--tw-text-opacity: 1;
@@ -2456,6 +2526,9 @@
 }
 :is(#wcar-admin-app) .opacity-50 {
 	opacity: 0.5;
+}
+:is(#wcar-admin-app) .opacity-60 {
+	opacity: 0.6;
 }
 :is(#wcar-admin-app) .\!shadow-none {
 	--tw-shadow: 0 0 #0000 !important;
@@ -2626,7 +2699,7 @@
 }
 :is(#wcar-admin-app) .ring-brand-primary-600 {
 	--tw-ring-opacity: 1;
-	--tw-ring-color: rgb(37 99 235 / var(--tw-ring-opacity, 1));
+	--tw-ring-color: rgb(229 78 26 / var(--tw-ring-opacity, 1));
 }
 :is(#wcar-admin-app) .ring-focus {
 	--tw-ring-opacity: 1;
@@ -2826,6 +2899,21 @@ a:focus-visible {
 
 #wcar-admin-app .recharts-tooltip-wrapper {
 	text-transform: capitalize;
+}
+
+/* For onboarding screens */
+#wpwrap:has( div.ca-page-content--wrapper.onboarding ) #adminmenumain {
+	display: none;
+}
+#wpwrap:has( div.ca-page-content--wrapper.onboarding ) #wpadminbar {
+	display: none;
+}
+#wpwrap:has( div.ca-page-content--wrapper.onboarding ) #wpcontent {
+	margin-right: 0;
+	margin-top: calc( 0px - var( --wp-admin--admin-bar--height ) );
+}
+#wpwrap:has( div.ca-page-content--wrapper.onboarding ) #wcar-admin-app > .onboarding {
+	width: 100%;
 }
 
 @media ( max-width: 1024px ) {
@@ -3091,6 +3179,11 @@ a:focus-visible {
 	border-color: rgb(37 99 235 / var(--tw-border-opacity, 1));
 }
 
+:is(#wcar-admin-app) .hover\:border-red-500:hover {
+	--tw-border-opacity: 1;
+	border-color: rgb(239 68 68 / var(--tw-border-opacity, 1));
+}
+
 :is(#wcar-admin-app) .hover\:border-text-inverse:hover {
 	--tw-border-opacity: 1;
 	border-color: rgb(255 255 255 / var(--tw-border-opacity, 1));
@@ -3174,6 +3267,11 @@ a:focus-visible {
 :is(#wcar-admin-app) .hover\:bg-flamingo-50:hover {
 	--tw-bg-opacity: 1;
 	background-color: rgb(254 244 238 / var(--tw-bg-opacity, 1));
+}
+
+:is(#wcar-admin-app) .hover\:bg-flamingo-500:hover {
+	--tw-bg-opacity: 1;
+	background-color: rgb(237 77 34 / var(--tw-bg-opacity, 1));
 }
 
 :is(#wcar-admin-app) .hover\:bg-gray-50:hover {
@@ -4376,6 +4474,9 @@ a:focus-visible {
 	}
 	:is(#wcar-admin-app) .lg\:w-\[47\.5rem\] {
 		width: 47.5rem;
+	}
+	:is(#wcar-admin-app) .lg\:w-auto {
+		width: auto;
 	}
 	:is(#wcar-admin-app) .lg\:w-full {
 		width: 100%;

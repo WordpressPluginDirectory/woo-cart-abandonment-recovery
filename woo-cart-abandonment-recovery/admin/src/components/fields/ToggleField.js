@@ -45,6 +45,7 @@ const ToggleField = ( {
 	manageState,
 	handleChange,
 	autoSave = true,
+	disabled,
 	isPro = false,
 	proUpgradeMessage = '',
 } ) => {
@@ -143,7 +144,7 @@ const ToggleField = ( {
 					size="md"
 					className="border-none moderncart-toggle-field"
 					role="switch"
-					disabled={ isPro && isFeatureBlocked }
+					disabled={ ( isPro && isFeatureBlocked ) || disabled }
 				/>
 			</div>
 		</FieldWrapper>

@@ -13,6 +13,7 @@ const TextareaDropdownField = ( {
 	name,
 	value,
 	handleChange,
+	countLimit = null,
 	options = [],
 	autoSave = true,
 	error,
@@ -32,7 +33,7 @@ const TextareaDropdownField = ( {
 		dispatch,
 		name,
 		undefined,
-		400,
+		1000,
 		true
 	);
 	const inputRef = useRef( null );
@@ -71,7 +72,9 @@ const TextareaDropdownField = ( {
 		const end = input.selectionEnd;
 
 		const newValue =
-			value.substring( 0, start ) + optionValue + value.substring( end );
+			textValue.substring( 0, start ) +
+			optionValue +
+			textValue.substring( end );
 		setTextValue( newValue );
 
 		// If handleChange is provided and autoSave is false, use form mode
@@ -91,7 +94,10 @@ const TextareaDropdownField = ( {
 			<div className="flex gap-2">
 				<div className="grow">
 					<TextArea
-						className="w-full focus:[&>input]:ring-focus"
+						className={ `w-full h-40 focus:[&>input]:ring-focus ${
+							textValue.length > countLimit &&
+							'border-red-500 focus:border-red-500 hover:border-red-500'
+						}` }
 						type="text"
 						size="md"
 						name={ name }
@@ -99,6 +105,36 @@ const TextareaDropdownField = ( {
 						value={ textValue }
 						onChange={ handleOnChange }
 					/>
+					{ countLimit !== null && (
+						<div
+							className={ `flex ${
+								textValue.length > countLimit
+									? 'justify-between'
+									: 'justify-end'
+							} mt-1` }
+						>
+							{ textValue.length > countLimit && (
+								<span className="text-red-500 text-sm">
+									{ __(
+										'Character limit exceeded',
+										'woo-cart-abandonment-recovery'
+									) }
+								</span>
+							) }
+							<span
+								className={ `text-sm ${
+									textValue.length > countLimit
+										? 'text-red-500'
+										: textValue.length > countLimit * 0.9
+											? 'text-yellow-500'
+											: 'text-gray-500'
+								}` }
+							>
+								{ textValue.length } / { countLimit }
+							</span>
+						</div>
+					) }
+
 					{ error && (
 						<p className="text-red-500 text-sm mt-1">{ error }</p>
 					) }

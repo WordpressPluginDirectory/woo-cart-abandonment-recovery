@@ -9,10 +9,12 @@ import SectionWrapper from '@Components/common/SectionWrapper';
 import EmailDetails from '@Components/detailedReport/EmailDetails';
 import UserOrderDetails from '@Components/detailedReport/UserOrderDetails';
 import UserAddressDetails from '@Components/detailedReport/UserAddressDetails';
+import SmsDetails from '@Components/detailedReport/SmsDetails';
 
 const DetailedReport = () => {
 	const [ isLoading, setIsLoading ] = useState( true );
 	const [ scheduledEmails, setScheduledEmails ] = useState( [] );
+	const [ scheduledSms, setScheduledSms ] = useState( [] );
 	const [ userDetails, setUserDetails ] = useState( {} );
 	const [ orderDetails, setOrderDetails ] = useState( {} );
 	const [ orderStatus, setOrderStatus ] = useState( '' );
@@ -20,7 +22,8 @@ const DetailedReport = () => {
 	const [ checkoutLink, setCheckoutLink ] = useState( '' );
 	const [ sessionId, setSessionId ] = useState( '' );
 	const [ unsubscribed, setUnsubscribed ] = useState( '' );
-	const [ buttonLoading, setButtonLoading ] = useState( false );
+	const [ emailButtonLoading, setEmailButtonLoading ] = useState( false );
+	const [ smsButtonLoading, setSmsButtonLoading ] = useState( false );
 	const navigate = useNavigate();
 	const urlParams = new URLSearchParams( useLocation().search );
 	const reportId = urlParams.get( 'id' );
@@ -35,6 +38,7 @@ const DetailedReport = () => {
 				'POST',
 				( response ) => {
 					setScheduledEmails( response.scheduled_emails || [] );
+					setScheduledSms( response.scheduled_sms || [] );
 					setUserDetails( response.user_details || {} );
 					setOrderDetails( response.order_details || {} );
 					setOrderStatus( response.details?.order_status || '' );
@@ -64,7 +68,7 @@ const DetailedReport = () => {
 		if ( ! sessionId ) {
 			return;
 		}
-		setButtonLoading( true );
+		setEmailButtonLoading( true );
 		const ajaxUrl = cart_abandonment_admin?.ajax_url;
 		const nonce = cart_abandonment_admin?.reschedule_emails_nonce;
 
@@ -88,7 +92,7 @@ const DetailedReport = () => {
 				} else {
 					toast.error(
 						__(
-							'Email Schedule failed',
+							'Email Scheduling failed',
 							'woo-cart-abandonment-recovery'
 						),
 						{
@@ -96,19 +100,74 @@ const DetailedReport = () => {
 						}
 					);
 				}
-				setButtonLoading( false );
+				setEmailButtonLoading( false );
 			},
 			( error ) => {
 				toast.error(
 					__(
-						'Email Schedule failed',
+						'Email Scheduling failed',
 						'woo-cart-abandonment-recovery'
 					),
 					{
 						description: error.data?.message || '',
 					}
 				);
-				setButtonLoading( false );
+				setEmailButtonLoading( false );
+			},
+			true,
+			false
+		);
+	};
+
+	const handleRescheduleSms = () => {
+		if ( ! sessionId ) {
+			return;
+		}
+		setSmsButtonLoading( true );
+		const ajaxUrl = cart_abandonment_admin?.ajax_url;
+		const nonce = cart_abandonment_admin?.reschedule_sms_nonce;
+
+		const formData = new window.FormData();
+		formData.append( 'action', 'wcar_pro_reschedule_sms' );
+		formData.append( 'session_id', sessionId );
+		formData.append( 'security', nonce );
+		doApiFetch(
+			ajaxUrl,
+			formData,
+			'POST',
+			( response ) => {
+				if ( response.success ) {
+					toast.success(
+						__(
+							'SMS Scheduled Successfully',
+							'woo-cart-abandonment-recovery'
+						)
+					);
+					setScheduledSms( response.data?.scheduled_sms || [] );
+				} else {
+					toast.error(
+						__(
+							'SMS Scheduling failed',
+							'woo-cart-abandonment-recovery'
+						),
+						{
+							description: response.data?.message || '',
+						}
+					);
+				}
+				setSmsButtonLoading( false );
+			},
+			( error ) => {
+				toast.error(
+					__(
+						'SMS Scheduling failed',
+						'woo-cart-abandonment-recovery'
+					),
+					{
+						description: error.data?.message || '',
+					}
+				);
+				setSmsButtonLoading( false );
 			},
 			true,
 			false
@@ -136,7 +195,13 @@ const DetailedReport = () => {
 						scheduledEmails={ scheduledEmails }
 						handleRescheduleEmails={ handleRescheduleEmails }
 						isLoading={ isLoading }
-						buttonLoading={ buttonLoading }
+						buttonLoading={ emailButtonLoading }
+					/>
+					<SmsDetails
+						scheduledSms={ scheduledSms }
+						handleRescheduleSms={ handleRescheduleSms }
+						isLoading={ isLoading }
+						buttonLoading={ smsButtonLoading }
 					/>
 					{ /* User Address Details Section */ }
 					<UserAddressDetails
@@ -159,4 +224,3 @@ const DetailedReport = () => {
 };
 
 export default DetailedReport;
-

@@ -408,12 +408,14 @@ class Cartflows_Ca_Tracking {
 			'_gdpr_nonce'               => wp_create_nonce( 'cartflows_skip_cart_tracking_gdpr' ),
 			'_post_id'                  => $post_id,
 			'_show_gdpr_message'        => ( wcf_ca()->utils->is_gdpr_enabled() && ! isset( $_COOKIE['wcf_ca_skip_track_data'] ) ),
-			'_gdpr_message'             => get_option( 'wcf_ca_gdpr_message' ),
+			'_gdpr_message'             => wcf_ca()->utils->wcar_get_option( 'wcf_ca_gdpr_message' ),
 			'_gdpr_nothanks_msg'        => __( 'No Thanks', 'woo-cart-abandonment-recovery' ),
 			'_gdpr_after_no_thanks_msg' => __( 'You won\'t receive further emails from us, thank you!', 'woo-cart-abandonment-recovery' ),
 			'enable_ca_tracking'        => true,
 			'_is_block_based_checkout'  => ! empty( $post_id ) && Cartflows_Ca_Helper::get_instance()->is_block_checkout( $post_id ),
 		];
+
+		$vars = apply_filters( 'cart_abandonment_vars', $vars );
 
 		wp_localize_script( 'cartflows-cart-abandonment-tracking', 'wcf_ca_vars', $vars );
 	}
@@ -524,11 +526,12 @@ class Cartflows_Ca_Tracking {
         // phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$wpdb->query(
 			$wpdb->prepare(
-				"UPDATE {$cart_abandonment_table} as ca SET order_status = 'lost' WHERE ca.order_status = %s AND DATE(ca.time) <= DATE_SUB( %s , INTERVAL 30 DAY)
+				"UPDATE {$cart_abandonment_table} as ca SET order_status = 'lost' WHERE ca.order_status = %s AND DATE(ca.time) <= DATE_SUB( %s , INTERVAL %s DAY)
               AND ( (SELECT count(*) FROM {$email_history_table} WHERE ca_session_id = ca.session_id ) =
               (SELECT count(*) FROM {$email_history_table} WHERE ca_session_id = ca.session_id AND email_sent = 1) )",
 				WCF_CART_ABANDONED_ORDER,
-				$wp_current_datetime
+				$wp_current_datetime,
+				wcf_ca()->utils->wcar_get_option( 'wcf_ca_cart_lost_time', WCF_DEFAULT_CART_LOST_TIME )
 			)
 		); // db call ok; no cache ok.
         // phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
@@ -695,7 +698,10 @@ class Cartflows_Ca_Tracking {
 				'default'  => 0,
 				'sanitize' => FILTER_SANITIZE_NUMBER_INT,
 			],
-
+			'wcf_gdpr_phone_consent'  => [
+				'default'  => '',
+				'sanitize' => 'FILTER_SANITIZE_STRING',
+			],
 		];
 
 		$sanitized_post = [];
@@ -818,7 +824,9 @@ class Cartflows_Ca_Tracking {
 				'wcf_first_name'          => $post_data['wcf_name'],
 				'wcf_last_name'           => $post_data['wcf_surname'],
 				'wcf_phone_number'        => $post_data['wcf_phone'],
+				'wcf_country'             => $post_data['wcf_country'],
 				'wcf_location'            => $post_data['wcf_country'] . ', ' . $post_data['wcf_city'],
+				'wcf_gdpr_phone_consent'  => $post_data['wcf_gdpr_phone_consent'],
 			];
 
 			$checkout_details = apply_filters(

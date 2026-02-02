@@ -20,15 +20,28 @@ const ProductReport = ( { dashboardData, isDashboardLoading } ) => {
 	const hasProductData =
 		dashboardData?.product_report &&
 		dashboardData.product_report.length > 0;
+	const start = convertToMMDDYYYY( dashboardData?.duration?.start );
+	const end = convertToMMDDYYYY( dashboardData?.duration?.end );
+	const duration = `(${ start } to ${ end })`;
 
 	const isFeatureBlocked = shouldBlockProFeatures();
+
+	function convertToMMDDYYYY( dateStr ) {
+		if ( ! isDashboardLoading ) {
+			const d = new Date( dateStr );
+			const mm = String( d.getMonth() + 1 ).padStart( 2, '0' );
+			const dd = String( d.getDate() ).padStart( 2, '0' );
+			const yyyy = d.getFullYear();
+			return `${ mm }-${ dd }-${ yyyy }`;
+		}
+		return dateStr;
+	}
 
 	return (
 		<SectionWrapper className="lg:w-1/2 flex flex-col gap-2 min-h-64">
 			<div className="flex justify-between items-center">
 				<div className="flex items-center gap-2">
 					<Title
-						description=""
 						iconPosition="right"
 						size="xs"
 						tag="h2"
@@ -36,7 +49,12 @@ const ProductReport = ( { dashboardData, isDashboardLoading } ) => {
 							'Product Reports',
 							'woo-cart-abandonment-recovery'
 						) }
-						className="[&>*]:text-gray-900"
+						description={
+							! isFeatureBlocked &&
+							! isDashboardLoading &&
+							duration
+						}
+						className="[&>*]:text-gray-900 flex items-center gap-2"
 					/>
 				</div>
 				<Link

@@ -6,7 +6,7 @@ import parse from 'html-react-parser';
 
 import { doApiFetch } from '@Store';
 
-import SettingsDrawerBody from '@Components/followUpEmails/EmailTemplatesDrawerBody';
+import SettingsDrawerBody from '@Components/followUpTemplates/emailTemplates//EmailTemplatesDrawerBody';
 import SkeletonLoader from '@Components/common/skeletons/SkeletonLoader';
 import { useProAccess } from '@Components/pro/useProAccess';
 
@@ -82,7 +82,7 @@ const EmailTemplatesDrawer = ( { open, setOpen, template, onSave } ) => {
 		}
 		setErrors( {} );
 		setIsLoading( false );
-	}, [ template ] );
+	}, [ template, open ] );
 
 	const handleChange = ( name, value ) => {
 		setFormState( ( prev ) => {
@@ -434,4 +434,3 @@ const EmailTemplatesDrawer = ( { open, setOpen, template, onSave } ) => {
 };
 
 export default EmailTemplatesDrawer;
-

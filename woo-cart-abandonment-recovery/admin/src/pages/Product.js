@@ -15,29 +15,29 @@ import {
 	XMarkIcon,
 	ExclamationTriangleIcon,
 	EyeIcon,
+	InformationCircleIcon,
 } from '@heroicons/react/24/outline';
 import { __, sprintf } from '@wordpress/i18n';
 
 import SectionWrapper from '@Components/common/SectionWrapper';
 import SkeletonLoader from '@Components/common/skeletons/SkeletonLoader';
-import { doApiFetch, useStateValue } from '@Store';
+import { doApiFetch } from '@Store';
 import { EmptyBlock } from '@Components/common/empty-blocks';
 import ExportToExcel from '@Components/common/ExportToExcel';
 import AppTooltip from '@Components/common/AppTooltip';
 import ConfirmationModal from '@Components/common/ConfirmationModal';
 import { ProUpgradeCta, ProductReportDummyData } from '@Components/pro';
 import { useProAccess } from '@Components/pro/useProAccess';
+import DateRange from '@Components/fields/DateRange';
 
 const Product = () => {
 	const [ selected, setSelected ] = useState( [] );
 	const [ currentPage, setCurrentPage ] = useState( 1 );
 	const [ itemsPerPage, setItemsPerPage ] = useState( 20 );
 	const [ searchText, setSearchText ] = useState( '' );
-	const [ isLoading, setIsLoading ] = useState( true );
+	const [ isLoading, setIsLoading ] = useState( false );
 	const [ data, setData ] = useState( [] );
-	const [ state, dispatch ] = useStateValue();
 	const { canAccessProFeatures, shouldBlockProFeatures } = useProAccess();
-	const storeProductData = state?.productData || null;
 
 	const [ deleteModal, setDeleteModal ] = useState( {
 		isOpen: false,
@@ -45,6 +45,15 @@ const Product = () => {
 		id: null,
 	} );
 	const [ isDeleting, setIsDeleting ] = useState( false );
+	// Default to last 7 days, ending today
+	const getDefaultRange = () => {
+		const to = new Date();
+		const from = new Date();
+		from.setDate( to.getDate() - 6 ); // 7 days including today
+		return { from, to };
+	};
+
+	const [ selectedRange, setSelectedRange ] = useState( getDefaultRange );
 	// Single condition check - this is all you need for pro feature access!
 	const canAccessPro = canAccessProFeatures();
 	const isFeatureBlocked = shouldBlockProFeatures();
@@ -52,37 +61,49 @@ const Product = () => {
 	useEffect( () => {
 		// Only fetch data if pro features are accessible
 		if ( canAccessPro ) {
-			if ( storeProductData ) {
-				setData( storeProductData );
-				setIsLoading( false );
-			} else {
-				const fetchData = async () => {
-					setIsLoading( true );
-					await doApiFetch(
-						'/wcar-pro/v1/admin/product-report',
-						{},
-						'POST',
-						( response ) => {
-							setData( response.items || [] );
-							dispatch( {
-								type: 'FETCH_PRODUCT_DATA_SUCCESS',
-								productData: response.items || [],
-							} );
-							setIsLoading( false );
+			const fetchData = async () => {
+				setIsLoading( true );
+				await doApiFetch(
+					'/wcar-pro/api/admin/product-report',
+					{
+						date_range: {
+							from:
+								selectedRange.from &&
+								new Date(
+									Date.UTC(
+										selectedRange.from.getFullYear(),
+										selectedRange.from.getMonth(),
+										selectedRange.from.getDate()
+									)
+								)
+									.toISOString()
+									.slice( 0, 10 ),
+							to:
+								selectedRange.to &&
+								new Date(
+									Date.UTC(
+										selectedRange.to.getFullYear(),
+										selectedRange.to.getMonth(),
+										selectedRange.to.getDate()
+									)
+								)
+									.toISOString()
+									.slice( 0, 10 ),
 						},
-						() => {
-							setIsLoading( false );
-						}
-					);
-				};
-				fetchData();
-			}
-		} else {
-			// Pro features not accessible - don't fetch data, show dummy data instead
-			setIsLoading( false );
-			setData( [] );
+					},
+					'POST',
+					( response ) => {
+						setData( response.items || [] );
+						setIsLoading( false );
+					},
+					() => {
+						setIsLoading( false );
+					}
+				);
+			};
+			fetchData();
 		}
-	}, [ canAccessPro ] );
+	}, [ canAccessPro, selectedRange ] );
 
 	const handleCheckboxChange = ( checked, value ) => {
 		if ( checked ) {
@@ -114,6 +135,11 @@ const Product = () => {
 		setCurrentPage( page );
 	};
 
+	const handleDateRangeChange = ( range ) => {
+		setSelectedRange( range );
+		setCurrentPage( 1 ); // Reset to first page when date range changes
+	};
+
 	const filteredData = data.filter( ( item ) =>
 		item.productName.toLowerCase().includes( searchText.toLowerCase() )
 	);
@@ -125,6 +151,17 @@ const Product = () => {
 		indexOfLastItem
 	);
 	const totalPages = Math.ceil( filteredData.length / itemsPerPage );
+	const filtersApplied =
+		searchText !== '' || selectedRange.from || selectedRange.to;
+
+	const handleClearFilters = () => {
+		setSearchText( '' );
+		setSelectedRange( {
+			from: undefined,
+			to: undefined,
+		} );
+		setCurrentPage( 1 );
+	};
 
 	// Handle delete trigger
 	const handleDeleteTrigger = () => {
@@ -141,7 +178,7 @@ const Product = () => {
 		const nonce = cart_abandonment_admin?.delete_product_reports_nonce;
 
 		const formData = new window.FormData();
-		formData.append( 'action', 'wcar_delete_product_reports' );
+		formData.append( 'action', 'wcar_pro_delete_product_reports' );
 		selected.forEach( ( id ) => formData.append( 'ids[]', id ) );
 		formData.append( 'security', nonce );
 
@@ -155,10 +192,6 @@ const Product = () => {
 						( record ) => ! selected.includes( record.id )
 					);
 					setData( updated );
-					dispatch( {
-						type: 'FETCH_PRODUCT_DATA_SUCCESS',
-						productData: updated,
-					} );
 					setSelected( [] );
 					toast.success(
 						__(
@@ -198,7 +231,7 @@ const Product = () => {
 		const nonce = cart_abandonment_admin?.delete_product_reports_nonce;
 
 		const formData = new window.FormData();
-		formData.append( 'action', 'wcar_delete_product_reports' );
+		formData.append( 'action', 'wcar_pro_delete_product_reports' );
 		formData.append( 'ids[]', deleteModal.id );
 		formData.append( 'security', nonce );
 
@@ -212,10 +245,6 @@ const Product = () => {
 						( record ) => record.id !== deleteModal.id
 					);
 					setData( updated );
-					dispatch( {
-						type: 'FETCH_PRODUCT_DATA_SUCCESS',
-						productData: updated,
-					} );
 					toast.success(
 						__( 'Record deleted', 'woo-cart-abandonment-recovery' )
 					);
@@ -303,6 +332,24 @@ const Product = () => {
 						) }
 					</div>
 					<div className="flex flex-col lg:flex-row gap-4">
+						{ filtersApplied && (
+							<Button
+								variant="link"
+								size="xs"
+								icon={ <XMarkIcon className="h-4 w-4" /> }
+								onClick={ handleClearFilters }
+								className="text-red-500 no-underline whitespace-nowrap focus:ring-0 [box-shadow:none] focus:[box-shadow:none] hover:no-underline hover:text-red-500"
+								aria-label={ __(
+									'Clear Filters',
+									'woo-cart-abandonment-recovery'
+								) }
+							>
+								{ __(
+									'Clear Filters',
+									'woo-cart-abandonment-recovery'
+								) }
+							</Button>
+						) }
 						<Input
 							placeholder="Search..."
 							prefix={
@@ -314,6 +361,11 @@ const Product = () => {
 							value={ searchText }
 							onChange={ handleSearch }
 							className="w-full lg:w-52"
+							disabled={ isLoading }
+						/>
+						<DateRange
+							selectedRange={ selectedRange }
+							setSelectedRange={ handleDateRangeChange }
 							disabled={ isLoading }
 						/>
 						<ExportToExcel data={ data } filename="productReport" />
@@ -370,6 +422,7 @@ const Product = () => {
 								'utm_source=wcar-dashboard&utm_medium=free-wcar&utm_campaign=go-wcar-pro'
 							}
 							footerMessage={ '' }
+							backgroundBlur={ true }
 						/>
 					</div>
 				) : data.length === 0 ? (
@@ -404,16 +457,32 @@ const Product = () => {
 								) }
 							</Table.HeadCell>
 							<Table.HeadCell>
-								{ __(
-									'Times Abandoned',
-									'woo-cart-abandonment-recovery'
-								) }
+								<div className="flex items-center">
+									{ __(
+										'Times Abandoned',
+										'woo-cart-abandonment-recovery'
+									) }
+									<AppTooltip
+										content="Total times the product was abandoned and the associated abandoned amount"
+										position="top"
+									>
+										<InformationCircleIcon className="h-3 w-3 ml-1 text-gray-500" />
+									</AppTooltip>
+								</div>
 							</Table.HeadCell>
 							<Table.HeadCell>
-								{ __(
-									'Times Recovered',
-									'woo-cart-abandonment-recovery'
-								) }
+								<div className="flex items-center">
+									{ __(
+										'Times Recovered',
+										'woo-cart-abandonment-recovery'
+									) }
+									<AppTooltip
+										content="Total times the product was recovered and the associated recovered amount"
+										position="top"
+									>
+										<InformationCircleIcon className="h-3 w-3 ml-1 text-gray-500" />
+									</AppTooltip>
+								</div>
 							</Table.HeadCell>
 							<Table.HeadCell className="text-right">
 								<span className="">
@@ -663,3 +732,4 @@ const Product = () => {
 };
 
 export default Product;
+

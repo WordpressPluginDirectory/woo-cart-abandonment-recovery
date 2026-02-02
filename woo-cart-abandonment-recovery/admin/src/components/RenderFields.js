@@ -15,9 +15,12 @@ import SubjectField from '@Components/fields/SubjectField';
 import RulesRepeater from '@Components/RuleEngine/RulesRepeater';
 import EmailField from '@Components/fields/EmailField';
 import UiSwitch from '@Components/fields/UiSwitch';
-import TestSms from '@Components/fields/TestSms';
+import TestMessage from '@Components/fields/TestMessage';
 import TextareaDropdownField from '@Components/fields/TextareaDropdownField';
 import PasswordField from '@Components/fields/PasswordField';
+import DynamicSelectField from '@Components/fields/DynamicSelectField';
+import SelectSearchField from '@Components/fields/SelectSearchField';
+import RollbackField from '@Components/fields/RollbackField';
 
 const RenderFields = ( {
 	data,
@@ -40,6 +43,7 @@ const RenderFields = ( {
 					description={ data.desc }
 					name={ data.name }
 					value={ value }
+					disabled={ data?.disabled }
 					isPro={ data?.is_pro }
 					proUpgradeMessage={ data?.pro_upgrade_message }
 					{ ...( handleChange && { handleChange } ) }
@@ -139,6 +143,40 @@ const RenderFields = ( {
 					name={ data.name }
 					value={ value }
 					optionsArray={ data.options }
+					isPro={ data?.is_pro }
+					proUpgradeMessage={ data?.pro_upgrade_message }
+					{ ...( handleChange && { handleChange } ) }
+					{ ...( autoSave !== undefined && { autoSave } ) }
+					{ ...( disableStyle !== undefined && { disableStyle } ) }
+				/>
+			);
+		case 'dynamic-select':
+			return (
+				<DynamicSelectField
+					title={ data.label }
+					description={ data.desc }
+					name={ data.name }
+					value={ value }
+					placeholder={ data.placeholder }
+					action={ data.action }
+					actionNonce={ data.action_nonce }
+					isPro={ data?.is_pro }
+					proUpgradeMessage={ data?.pro_upgrade_message }
+					{ ...( handleChange && { handleChange } ) }
+					{ ...( autoSave !== undefined && { autoSave } ) }
+					{ ...( disableStyle !== undefined && { disableStyle } ) }
+				/>
+			);
+		case 'select-search':
+			return (
+				<SelectSearchField
+					title={ data.label }
+					description={ data.desc }
+					name={ data.name }
+					value={ value }
+					placeholder={ data.placeholder }
+					action={ data.action }
+					actionNonce={ data.action_nonce }
 					isPro={ data?.is_pro }
 					proUpgradeMessage={ data?.pro_upgrade_message }
 					{ ...( handleChange && { handleChange } ) }
@@ -262,13 +300,16 @@ const RenderFields = ( {
 					name={ data.name }
 				/>
 			);
-		case 'test_sms':
+		case 'test_message':
 			return (
-				<TestSms
+				<TestMessage
 					title={ data.label }
 					description={ data.desc }
 					name={ data.name }
 					value={ value }
+					action={ data.action }
+					actionNonce={ data.action_nonce }
+					messageType={ data.message_type }
 				/>
 			);
 		case 'textarea_dropdown':
@@ -279,6 +320,7 @@ const RenderFields = ( {
 					name={ data.name }
 					value={ value }
 					options={ data?.options || [] }
+					countLimit={ data?.count_limit || null }
 					{ ...( handleChange && { handleChange } ) }
 					{ ...( errors &&
 						errors[ data.name ] && {
@@ -304,6 +346,16 @@ const RenderFields = ( {
 					} ) }
 					{ ...( autoSave !== undefined && { autoSave } ) }
 					{ ...( disableStyle !== undefined && { disableStyle } ) }
+				/>
+			);
+		case 'rollback':
+			return (
+				<RollbackField
+					title={ data.label }
+					description={ data.desc }
+					name={ data.name }
+					value={ value }
+					options={ data?.options || [] }
 				/>
 			);
 		default:

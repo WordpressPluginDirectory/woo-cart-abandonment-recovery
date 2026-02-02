@@ -188,4 +188,3 @@ function HeaderSaleNotice() {
 }
 
 export default HeaderSaleNotice;
-

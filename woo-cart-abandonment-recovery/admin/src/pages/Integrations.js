@@ -217,7 +217,7 @@ const Integrations = () => {
 			<Container
 				className={ `w-full ${
 					'ottokit-integration' !== active ? 'max-w-[43.5rem]' : ''
-				} mx-auto mt-8 pr-4 pb-5 gap-0` }
+				} mx-auto mt-8 pr-4 pb-5 gap-0 relative` }
 				direction="column"
 			>
 				{
@@ -230,3 +230,4 @@ const Integrations = () => {
 };
 
 export default Integrations;
+

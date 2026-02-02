@@ -38,12 +38,15 @@ const ProUpgradeCtaModal = ( { props } ) => {
 		actionbtnUrl,
 		actionBtnUrlArgs,
 		footerMessage,
+		backgroundBlur,
 	} = props;
 
 	return (
 		<div className="absolute inset-0 z-10 flex items-center justify-center">
 			{ /* White blurred background overlay - reduced blur for better readability */ }
-			<div className="absolute inset-0 bg-white/20 backdrop-blur-[2px]"></div>
+			{ backgroundBlur && (
+				<div className="absolute inset-0 bg-white/20 backdrop-blur-[2px]"></div>
+			) }
 
 			{ /* Modal content - reduced height */ }
 			<div className="relative z-20 bg-white rounded-lg shadow-2xl w-full max-w-xl mx-4 p-6 border border-gray-200">

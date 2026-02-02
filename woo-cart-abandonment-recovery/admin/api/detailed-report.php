@@ -104,6 +104,8 @@ class DetailedReport extends ApiBase {
 			'checkout_link'    => $checkout_link,
 		];
 
+		$response = apply_filters( 'wcar_detailed_report_data', $response, $details );
+
 		return rest_ensure_response( $response );
 	}
 

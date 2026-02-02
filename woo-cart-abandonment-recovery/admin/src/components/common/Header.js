@@ -21,8 +21,8 @@ const Header = () => {
 			path: 'dashboard',
 		},
 		{
-			name: __( 'Follow Up Emails', 'woo-cart-abandonment-recovery' ),
-			path: 'follow-up-emails',
+			name: __( 'Follow Up Templates', 'woo-cart-abandonment-recovery' ),
+			path: 'follow-up-templates',
 		},
 		{
 			name: __( 'Reports', 'woo-cart-abandonment-recovery' ),
